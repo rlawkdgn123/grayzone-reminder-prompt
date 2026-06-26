@@ -1,0 +1,14 @@
+# OS/editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Local generated output
+TodoList (*.html)
+onboarding-state.json
+*.log
+
+# Archives generated from release packaging
+*.zip
+*.7z
+

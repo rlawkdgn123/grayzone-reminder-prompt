@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{PROJECT_NAME}} Art Daily Dashboard - {{DATE}}</title>
+  <!-- Source usage: worklogs/diary provide todo evidence; pipeline documents provide stage mapping only; pipeline documents alone do not create todos. -->
+  <style>
+    :root {
+      --bg: #eef1f0;
+      --surface: #fbfcfa;
+      --ink: #202521;
+      --muted: #5d665f;
+      --line: #d8ded7;
+      --green: #2d6f5c;
+      --green-soft: #dfeee8;
+      --blue: #315f8a;
+      --blue-soft: #e1ebf4;
+      --rose: #9b4f55;
+      --rose-soft: #f3e1e3;
+      --gold: #8c6a25;
+      --gold-soft: #efe7cf;
+      --shadow: 0 18px 36px rgba(32, 37, 33, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "NanumBarunGothic", "Nanum Barun Gothic", "Malgun Gothic", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: linear-gradient(120deg, rgba(45, 111, 92, 0.10), transparent 30%), linear-gradient(240deg, rgba(49, 95, 138, 0.10), transparent 28%), var(--bg);
+    }
+    code { font-family: "Cascadia Mono", Consolas, monospace; padding: 0.08rem 0.28rem; border-radius: 4px; background: rgba(32, 37, 33, 0.07); }
+    .page { width: min(1180px, calc(100% - 32px)); margin: 28px auto 42px; display: grid; gap: 18px; }
+    .hero, .panel, .card { background: rgba(251, 252, 250, 0.94); border: 1px solid var(--line); border-radius: 8px; box-shadow: var(--shadow); padding: 20px; }
+    .kicker { margin: 0 0 8px; color: var(--green); font-size: 0.82rem; font-weight: 800; text-transform: uppercase; }
+    h1, h2, h3, p { margin: 0; }
+    h1 { font-size: 2.2rem; font-weight: 900; letter-spacing: 0; line-height: 1.2; }
+    h2 { font-size: 1.1rem; font-weight: 900; letter-spacing: 0; }
+    h3 { font-size: 1rem; font-weight: 800; letter-spacing: 0; }
+    .desc { color: var(--muted); line-height: 1.6; font-size: 0.95rem; }
+    .chip { display: inline-flex; align-items: center; min-height: 28px; padding: 0 10px; border-radius: 999px; background: var(--green-soft); color: var(--green); font-size: 0.8rem; font-weight: 800; white-space: nowrap; }
+    .chip.blue { background: var(--blue-soft); color: var(--blue); }
+    .chip.rose { background: var(--rose-soft); color: var(--rose); }
+    .chip.gold { background: var(--gold-soft); color: var(--gold); }
+    .section-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px; }
+    .count { color: var(--muted); font-size: 0.82rem; font-weight: 700; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .list { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+    .list li { border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; background: var(--surface); color: var(--muted); line-height: 1.55; }
+    .progress { height: 10px; border-radius: 999px; overflow: hidden; background: #dfe5df; margin-top: 10px; }
+    .bar { width: var(--value); height: 100%; background: linear-gradient(90deg, var(--green), var(--blue)); }
+    .bar.paused { background: linear-gradient(90deg, var(--rose), var(--gold)); }
+    @media (max-width: 980px) { .grid-3, .grid-2 { grid-template-columns: 1fr; } h1 { font-size: 1.85rem; } .page { width: min(100% - 20px, 1180px); } }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <p class="kicker">{{PROJECT_NAME}} Art Daily Dashboard</p>
+      <h1>오늘의 아트 작업 우선순위</h1>
+      <p class="desc">{{DATE}} 기준. 아트 산출물, 파이프라인 위치, 보류 작업, 다음 제작 단계를 정리합니다.</p>
+    </section>
+    <section class="panel"><div class="section-head"><h2>오늘의 핵심 아트 목표</h2><span class="count">{{GOAL_COUNT}} goals</span></div><ul class="list">{{GOAL_ITEMS}}</ul></section>
+    <section class="panel"><div class="section-head"><h2>현재 아트 파이프라인 위치</h2><span class="count">{{PIPELINE_COUNT}} tracks</span></div><div class="grid-2">{{PIPELINE_CARDS}}</div></section>
+    <section class="panel"><div class="section-head"><h2>오늘 우선 제작 / 정리할 산출물 Top 3</h2><span class="count">{{TOP3_COUNT}} deliverables</span></div><div class="grid-3">{{TOP3_CARDS}}</div></section>
+    <section class="grid-2">
+      <article class="panel"><div class="section-head"><h2>오늘 바로 할 일</h2><span class="count">{{ACTION_COUNT}} actions</span></div><ul class="list">{{ACTION_ITEMS}}</ul></article>
+      <article class="panel"><div class="section-head"><h2>이어갈 산출물</h2><span class="count">{{OUTPUT_COUNT}} outputs</span></div><ul class="list">{{OUTPUT_ITEMS}}</ul></article>
+    </section>
+    <section class="grid-2">
+      <article class="panel"><div class="section-head"><h2>확인 필요 / 막힌 것</h2><span class="count">{{CHECK_COUNT}} checks</span></div><ul class="list">{{CHECK_ITEMS}}</ul></article>
+      <article class="panel"><div class="section-head"><h2>보류 중인 작업</h2><span class="count">{{PAUSED_COUNT}} paused</span></div><ul class="list">{{PAUSED_ITEMS}}</ul></article>
+    </section>
+    <section class="grid-2">
+      <article class="panel"><div class="section-head"><h2>오늘의 완료 기준</h2><span class="count">{{CRITERIA_COUNT}} criteria</span></div><ul class="list">{{CRITERIA_ITEMS}}</ul></article>
+      <article class="panel"><div class="section-head"><h2>추천 제작 순서</h2><span class="count">{{ORDER_COUNT}} steps</span></div><ol class="list">{{ORDER_ITEMS}}</ol></article>
+    </section>
+    <section class="panel"><div class="section-head"><h2>다음 파이프라인 단계</h2><span class="count">{{NEXT_COUNT}} next</span></div><ul class="list">{{NEXT_ITEMS}}</ul></section>
+    <section class="panel"><div class="section-head"><h2>근거 요약</h2><span class="count">{{EVIDENCE_COUNT}} sources</span></div><ul class="list">{{EVIDENCE_ITEMS}}</ul></section>
+  </main>
+</body>
+</html>
